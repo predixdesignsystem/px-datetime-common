@@ -81,7 +81,8 @@ Custom property | Description
             disable-clear
             items="[[_getTimeZoneList(showTimeZone)]]"
             on-focus="_handleDropdownFocus"
-            on-blur="_handleDropdownBlur">
+            on-blur="_handleDropdownBlur"
+            hoist>
           </px-dropdown>
         </template>
         <template is="dom-if" if="{{_showTimeZoneText(showTimeZone)}}">
