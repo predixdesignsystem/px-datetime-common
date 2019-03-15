@@ -56,6 +56,7 @@ limitations under the License.
         <p class="u-mb0">Event fired: <strong>px-datetime-submitted</strong></p>
         <p class="zeta u-mt0">See API Reference below for more details</p>
         <px-datetime-entry
+            resources="{{props.resources.value}}"
             block-future-dates="{{props.blockFutureDates.value}}"
             block-past-dates="{{props.blockPastDates.value}}"
             hide-icon="{{props.hideIcon.value}}"
@@ -126,6 +127,12 @@ limitations under the License.
      * A reference for `this.props`. Read the documentation there.
      */
     demoProps: {
+
+      resources: {
+        type: Object,
+        defaultValue: {"en":{"YY":"Year","MM":"Month","DD":"Day"}},
+        inputType: 'code:JSON'
+      },
 
       blockFutureDates: {
         type: Boolean,

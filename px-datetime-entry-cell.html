@@ -145,7 +145,8 @@ Datetime input element. Includes iron-ally-keys-behavior to limit keystrokes to 
     },
 
     observers:[
-      '_updateInputValue(momentObj, timeZone)'
+      '_updateInputValue(momentObj, timeZone)',
+      '_onResourcesUpdated(resources)'
     ],
 
     /**
@@ -284,6 +285,20 @@ Datetime input element. Includes iron-ally-keys-behavior to limit keystrokes to 
       }
     },
     /**
+     * When resources is changed, update placeholder text and resize input if need.
+     */
+    _onResourcesUpdated: function(resources) {
+      const entryInput = this.$$('.datetime-entry-input');
+      const currentPlaceholderText = entryInput.placeholder;
+      const nextPlaceholderText = this._placeholderText(this.momentFormat);
+      if (nextPlaceholderText !== currentPlaceholderText) {
+        entryInput.placeholder = nextPlaceholderText;
+        if (!this.momentObj) {
+          this._sizeInputs();
+        }
+      }
+    },
+    /**
      * Fires when 'left' key is hit
      *
      * @event px-entry-cell-move
@@ -412,6 +427,7 @@ Datetime input element. Includes iron-ally-keys-behavior to limit keystrokes to 
     },
     /**
      * If the momentFormat format is not 'Z', 'ZZ', 'X', 'x', 'A' or 'a' then return the momentFormat
+     * Note: placeholder text supports i18n
      */
     _placeholderText: function(momentFormat){
       var phText = {
@@ -423,10 +439,12 @@ Datetime input element. Includes iron-ally-keys-behavior to limit keystrokes to 
         'A': 'AM'
       };
 
+      let text = momentFormat;
+
       if(phText[momentFormat]){
-        return phText[momentFormat];
+        text = phText[momentFormat];
       }
-      return momentFormat;
+      return this.localize(text);
     },
      /**
      * Handles before copy event
