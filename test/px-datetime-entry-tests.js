@@ -34,6 +34,46 @@ suite('px-datetime-entry-cell', function () {
     });
   });
 
+  test('the date cells can have localized placeholder', function (done) {
+    const cells = Polymer.dom(dateFixt.root).querySelectorAll('px-datetime-entry-cell');
+    const yearInput = Polymer.dom(cells[0].root).querySelector('.datetime-entry-input');
+    const monthInput = Polymer.dom(cells[1].root).querySelector('.datetime-entry-input');
+    const dayInput = Polymer.dom(cells[2].root).querySelector('.datetime-entry-input');
+    expect(yearInput.getAttribute('placeholder')).to.equal('Year');
+    expect(monthInput.getAttribute('placeholder')).to.equal('Month');
+    expect(dayInput.getAttribute('placeholder')).to.equal('Day');
+    done();
+  });
+
+  test('the time cells can have localized placeholder', function (done) {
+    const cells = Polymer.dom(timeFixt.root).querySelectorAll('px-datetime-entry-cell');
+    const hourInput = Polymer.dom(cells[0].root).querySelector('.datetime-entry-input');
+    const minuteInput = Polymer.dom(cells[1].root).querySelector('.datetime-entry-input');
+    const secondInput = Polymer.dom(cells[2].root).querySelector('.datetime-entry-input');
+    expect(hourInput.getAttribute('placeholder')).to.equal('Hour');
+    expect(minuteInput.getAttribute('placeholder')).to.equal('Minute');
+    expect(secondInput.getAttribute('placeholder')).to.equal('Second');
+    done();
+  });
+
+  test('placeholder can get updated according to resources change', function(done) {
+    dateFixt.momentObj = null;
+    dateFixt.setAttribute('resources', JSON.stringify({
+      en: {
+        YYYY: 'Year2',
+        MM: 'Month2',
+        DD: 'Day2',
+      },
+    }));
+    const cells = Polymer.dom(dateFixt.root).querySelectorAll('px-datetime-entry-cell');
+    const yearInput = Polymer.dom(cells[0].root).querySelector('.datetime-entry-input');
+    const monthInput = Polymer.dom(cells[1].root).querySelector('.datetime-entry-input');
+    const dayInput = Polymer.dom(cells[2].root).querySelector('.datetime-entry-input');
+    expect(yearInput.getAttribute('placeholder')).to.equal('Year2');
+    expect(monthInput.getAttribute('placeholder')).to.equal('Month2');
+    expect(dayInput.getAttribute('placeholder')).to.equal('Day2');
+    done();
+  })
 
   test('the date cells have a value if momentObj is set', function (done) {
     var cells = Polymer.dom(dateFixt.root).querySelectorAll('px-datetime-entry-cell');
@@ -46,7 +86,7 @@ suite('px-datetime-entry-cell', function () {
 
 
   test('the time cells have a value if momentObj is set', function (done) {
-    var cells = Polymer.dom(timeEntry.root).querySelectorAll('px-datetime-entry-cell');
+    var cells = Polymer.dom(timeFixt.root).querySelectorAll('px-datetime-entry-cell');
     for (i = 0; i < cells.length; i++) {
       var cellInput = Polymer.dom(cells[i].root).querySelectorAll('.datetime-entry-input');
       assert.notEqual(cellInput[0].value, '');
