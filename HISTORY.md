@@ -1,3 +1,7 @@
+v3.3.0
+==================
+* Added i18n support for date picker placeholder text via the `resources` property.
+
 v3.2.7
 ==================
 * Add margin right and margin left.
