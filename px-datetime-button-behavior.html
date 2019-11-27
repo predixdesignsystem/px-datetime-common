@@ -14,29 +14,29 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<link rel="import" href="../px-moment-imports/px-moment-imports.html"/>
-<link rel="import" href="../iron-a11y-keys-behavior/iron-a11y-keys-behavior.html"/>
+<script type="module" src="../px-moment-imports/px-moment-imports.js"></script>
+<script type="module" src="../@polymer/iron-a11y-keys-behavior/iron-a11y-keys-behavior.js"></script>
 
-<script>
-(function() {
-  var PxDatetimeBehavior = window.PxDatetimeBehavior = (window.PxDatetimeBehavior || {});
+<script type="module">
+import 'px-moment-imports/px-moment-imports.js';
+import { IronA11yKeysBehavior } from '@polymer/iron-a11y-keys-behavior/iron-a11y-keys-behavior.js';
+var PxDatetimeBehavior = window.PxDatetimeBehavior = (window.PxDatetimeBehavior || {});
 
-  /**
-   * For components that can have apply/cancel buttons
-   *
-   * @polymerBehavior PxDatetimeBehavior.Buttons
-   */
-  PxDatetimeBehavior.Buttons = [{
-    properties: {
-      /**
-       * Whether to show Apply and Cancel buttons in the components
-       */
-      showButtons: {
-        type: Boolean,
-        value: false,
-        reflectToAttribute: true
-      }
+/**
+ * For components that can have apply/cancel buttons
+ *
+ * @polymerBehavior PxDatetimeBehavior.Buttons
+ */
+PxDatetimeBehavior.Buttons = [{
+  properties: {
+    /**
+     * Whether to show Apply and Cancel buttons in the components
+     */
+    showButtons: {
+      type: Boolean,
+      value: false,
+      reflectToAttribute: true
     }
-  }, Polymer.IronA11yKeysBehavior];
-})();
+  }
+}, IronA11yKeysBehavior];
 </script>

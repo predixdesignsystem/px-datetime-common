@@ -21,63 +21,64 @@ limitations under the License.
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Predix UI</title>
-  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
-  <link rel="import" href="../../polymer/polymer.html" />
+  <script src="../../@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
+  <script type="module" src="../../@polymer/polymer/polymer-legacy.js"></script>
 
-  <link rel="import" href="../../px-theme/px-theme-styles.html">
+  <script type="module" src="../../px-theme/px-theme-styles.js"></script>
 
-  <link rel="import" href="../px-datetime-entry.html" />
-  <custom-style>
+  <script type="module" src="../px-datetime-entry.js"></script>
+  <!-- FIXME(polymer-modulizer):
+        These imperative modules that innerHTML your HTML are
+        a hacky way to be sure that any mixins in included style
+        modules are ready before any elements that reference them are
+        instantiated, otherwise the CSS @apply mixin polyfill won't be
+        able to expand the underlying CSS custom properties.
+        See: https://github.com/Polymer/polymer-modulizer/issues/154
+        -->
+    <script type="module">
+const $_documentContainer = document.createElement('template');
+
+$_documentContainer.innerHTML = `<custom-style>
     <style include="px-theme-styles" is="custom-style"></style>
-  </custom-style>
+  </custom-style>`;
+
+document.body.appendChild($_documentContainer.content);
+</script>
 </head>
 <body>
-    <dom-bind>
+    <script type="module">
+const $_documentContainer = document.createElement('template');
+
+$_documentContainer.innerHTML = `<dom-bind>
         <template is="dom-bind">
       <div style="display:flex">
-        <px-datetime-entry
-          date-or-time="Date"
-          block-future-dates
-          time-zone="UTC"
-          show-time-zone="dropdown"
-          moment-format="MM/DD/YY">
+        <px-datetime-entry date-or-time="Date" block-future-dates="" time-zone="UTC" show-time-zone="dropdown" moment-format="MM/DD/YY">
         </px-datetime-entry>
-        <px-datetime-entry
-          date-or-time="Time"
-          moment-format="hh:mm a"
-          time-zone="UTC"
-          show-time-zone="dropdown">
+        <px-datetime-entry date-or-time="Time" moment-format="hh:mm a" time-zone="UTC" show-time-zone="dropdown">
         </px-datetime-entry>
       </div>
-      </br>
+      <br>
       <div style="display:flex">
-        <px-datetime-entry
-          date-or-time="Date"
-          block-future-dates
-          time-zone="UTC"
-          show-time-zone="dropdown"
-          moment-format="MM/DD/YY"
-          moment-obj="{{momentObj}}">
+        <px-datetime-entry date-or-time="Date" block-future-dates="" time-zone="UTC" show-time-zone="dropdown" moment-format="MM/DD/YY" moment-obj="{{momentObj}}">
         </px-datetime-entry>
-        <px-datetime-entry
-          date-or-time="Time"
-          moment-format="hh:mm a"
-          time-zone="UTC"
-          show-time-zone="dropdown"
-          moment-obj="{{momentObj}}">
+        <px-datetime-entry date-or-time="Time" moment-format="hh:mm a" time-zone="UTC" show-time-zone="dropdown" moment-obj="{{momentObj}}">
         </px-datetime-entry>
       </div>
   </template>
-</dom-bind>
-<script>
-  document.addEventListener('WebComponentsReady', function() {
-    var template = document.querySelector('template[is=dom-bind]');
-    template.momentObj = Px.moment().subtract(7, 'days');
+</dom-bind>`;
 
-    // Support hybrid mode
-    var templatev1 = document.querySelector('dom-bind');
-    templatev1.momentObj = template.momentObj;
-  });
+document.body.appendChild($_documentContainer.content);
+</script>
+<script type="module">
+import '@polymer/polymer/polymer-legacy.js';
+import 'px-theme/px-theme-styles.js';
+import '../px-datetime-entry.js';
+var template = document.querySelector('template[is=dom-bind]');
+template.momentObj = Px.moment().subtract(7, 'days');
+
+// Support hybrid mode
+var templatev1 = document.querySelector('dom-bind');
+templatev1.momentObj = template.momentObj;
 </script>
 </body>
 </html>
