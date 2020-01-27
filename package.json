@@ -56,12 +56,13 @@
   },
   "main": "px-datetime-common.js",
   "dependencies": {
-    "@polymer/polymer": "^3.0.0",
-    "@polymer/iron-a11y-keys-behavior": "^3.0.0",
     "@polymer/app-localize-behavior": "^3.0.0",
-    "px-moment-imports": "https://github.com/predixdesignsystem/px-moment-imports.git#polymer-upgrade",
-    "px-icon-set": "https://github.com/predixdesignsystem/px-icon-set.git#polymer-upgrade",
+    "@polymer/iron-a11y-keys-behavior": "^3.0.0",
+    "@polymer/polymer": "^3.0.0",
+    "luxon": "^1.22.0",
     "px-dropdown": "https://github.com/predixdesignsystem/px-dropdown.git#polymer-upgrade",
+    "px-icon-set": "https://github.com/predixdesignsystem/px-icon-set.git#polymer-upgrade",
+    "px-moment-imports": "https://github.com/predixdesignsystem/px-moment-imports.git#polymer-upgrade",
     "px-overlay": "https://github.com/predixdesignsystem/px-overlay.git#polymer-upgrade"
   }
 }
