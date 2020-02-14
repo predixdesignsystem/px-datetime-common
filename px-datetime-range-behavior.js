@@ -13,11 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-/*
-  FIXME(polymer-modulizer): the above comments were extracted
-  from HTML and may be out of place here. Review them and
-  then delete this comment!
-*/
+
 import './px-datetime-shared-behavior.js';
 
 var PxDatetimeBehavior = window.PxDatetimeBehavior = (window.PxDatetimeBehavior || {});
@@ -74,8 +70,8 @@ PxDatetimeBehavior.Range = [{
      *    },
      *    {
      *      "displayText": "Last 12 Hours",
-     *      "startDateTime": function() {return moment().subtract(1, 'days').toISOString();},
-     *      "endDateTime": function() {return moment().startOf('day').toISOString();}
+     *      "startDateTime": function() {return DateTime.minus({ days: 1 }).toISO();},
+     *      "endDateTime": function() {return DateTime.startOf('day').toISO();}
      *    }
      *   ]
      * ```

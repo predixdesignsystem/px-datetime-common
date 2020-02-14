@@ -26,11 +26,7 @@ The list of preset ranges in the rangepicker modal.
 @homepage index.html
 @demo index.html
 */
-/*
-  FIXME(polymer-modulizer): the above comments were extracted
-  from HTML and may be out of place here. Review them and
-  then delete this comment!
-*/
+
 import '@polymer/polymer/polymer-legacy.js';
 
 import 'px-moment-imports/px-moment-imports.js';
@@ -74,15 +70,15 @@ Polymer({
      *    },
      *    {
      *      "displayText": "Last 12 Hours",
-     *      "startDateTime": function() {return moment().subtract(1, 'days').toISOString();},
-     *      "endDateTime": function() {return moment().startOf('day').toISOString();}
+     *      "startDateTime": function() {return DateTime.local().minus({ days: 1 }).toISO();},
+     *      "endDateTime": function() {return DateTime.local().toISO();}
      *    }
      *   ]
      * ```
      *
      * startDateTime and endDateTime can also be functions, in which case
-     * they need to either return an ISO string as seen abode or a moment
-     * object
+     * they need to either return an ISO string as seen above or a Luxon
+     * DateTime object
      *
      * @default no presets
      */

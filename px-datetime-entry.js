@@ -38,11 +38,7 @@ Custom property | Description
 @homepage index.html
 @demo index.html
 */
-/*
-  FIXME(polymer-modulizer): the above comments were extracted
-  from HTML and may be out of place here. Review them and
-  then delete this comment!
-*/
+
 import '@polymer/polymer/polymer-legacy.js';
 
 import '@polymer/iron-a11y-keys-behavior/iron-a11y-keys-behavior.js';
@@ -57,6 +53,7 @@ import 'px-overlay/px-overlay-behavior.js';
 import { Polymer } from '@polymer/polymer/lib/legacy/polymer-fn.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 import { dom } from '@polymer/polymer/lib/legacy/polymer.dom.js';
+import { DateTime } from 'luxon/src/luxon';
 Polymer({
   _template: html`
     <style include="px-datetime-entry-styles"></style>
@@ -470,8 +467,8 @@ Polymer({
    */
   _getTimeZoneText: function(timeZone, showTimeZone) {
     if(timeZone !== undefined && showTimeZone === "abbreviatedText") {
-      tempMomentObj = this.momentObj ? this.momentObj : Px.moment();
-      return Px.moment.tz.zone(timeZone).abbr(tempMomentObj);
+      tempDateTimeObj = this.dateTimeObj ? this.dateTimeObj : DateTime.local();
+      return Px.moment.tz.zone(timeZone).abbr(tempDateTimeObj);
     } else if (showTimeZone === "text"){
       return timeZone;
     }

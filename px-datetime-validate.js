@@ -13,14 +13,11 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-/*
-  FIXME(polymer-modulizer): the above comments were extracted
-  from HTML and may be out of place here. Review them and
-  then delete this comment!
-*/
+
 import { AppLocalizeBehavior } from '@polymer/app-localize-behavior/app-localize-behavior.js';
 
 import { dom } from '@polymer/polymer/lib/legacy/polymer.dom.js';
+import { DateTime } from 'luxon/src/luxon';
 var PxDatetimeBehavior = window.PxDatetimeBehavior = (window.PxDatetimeBehavior || {});
 
 /**
@@ -157,7 +154,8 @@ PxDatetimeBehavior.Validate = [AppLocalizeBehavior, {
     var dateFormat = this.hideDate ? '' : this.dateFormat,
         timeFormat = this.hideTime ? '' : this.timeFormat,
         dateTimeFormat = dateFormat + " " + timeFormat,
-        dateTimeMoment = Px.moment.tz(dateTimeString, dateTimeFormat, this.timeZone);
+        dateTimeMoment = DateTime.fromFormat( dateTimeString, dateTimeFormat, {zone: this.timeZone} );
+        //TODO: Handle dateTimeFormat changes between Moment and Luxon
 
     if(this.momentObj) {
       //preserve parts of the momentObj that are not displayed
@@ -190,10 +188,12 @@ PxDatetimeBehavior.Validate = [AppLocalizeBehavior, {
     }
 
     var invalidObj = new Object();
-    invalidObj.futureSelection = this.blockFutureDates && validatingMomentObj.isAfter(Px.moment.tz(Px.moment(), this.timeZone));
-    invalidObj.pastSelection   = this.blockPastDates && validatingMomentObj.isBefore(Px.moment.tz(Px.moment(), this.timeZone));
-    invalidObj.pastMaxSelection   = this.maxDate && validatingMomentObj.isAfter(this.maxDate);
-    invalidObj.beforeMinSelection = this.minDate && validatingMomentObj.isBefore(this.minDate);
+    var currentLocalDateTime = DateTime.local().setZone(this.timeZone);
+
+    invalidObj.futureSelection = this.blockFutureDates && ( validatingMomentObj >  currentLocalDateTime);
+    invalidObj.pastSelection = this.blockPastDates && ( validatingMomentObj < currentLocalDateTime );
+    invalidObj.pastMaxSelection = this.maxDate && ( validatingMomentObj > this.maxDate );
+    invalidObj.beforeMinSelection = this.minDate && ( validatingMomentObj < this.minDate );
 
     if ((validatingMomentObj.isValid() && !invalidObj.futureSelection && !invalidObj.pastSelection && !invalidObj.pastMaxSelection && !invalidObj.beforeMinSelection)) {
       this._validField(validatingMomentObj);

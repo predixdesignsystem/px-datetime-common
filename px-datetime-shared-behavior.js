@@ -13,12 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-/*
-  FIXME(polymer-modulizer): the above comments were extracted
-  from HTML and may be out of place here. Review them and
-  then delete this comment!
-*/
-import 'px-moment-imports/px-moment-imports.js';
+
+import {DateTime} from 'luxon/src/luxon.js';
 
 import { IronA11yKeysBehavior } from '@polymer/iron-a11y-keys-behavior/iron-a11y-keys-behavior.js';
 import { AppLocalizeBehavior } from '@polymer/app-localize-behavior/app-localize-behavior.js';
@@ -50,25 +46,24 @@ PxDatetimeBehavior.BlockDates = {
 
 /**
  * For all `px-datetime` components
- * Dependencies: momentjs
+ * Dependencies: luxon
  *
  * @polymerBehavior PxDatetimeBehavior.Shared
  */
 PxDatetimeBehavior.Shared = [{
   properties: {
     /**
-     * Moment-timezone string for using a specific timezone. See
-     * http://momentjs.com/timezone/docs/#/data-loading/getting-zone-names/.
+     * Luxon Datetime String for the Timezone
      *
      * If not provided, tries to guess the current local timezone.
      *
-     * @default Px.moment.tz.guess();
+     * @default this.localDateTime.zoneName;
      */
     timeZone: {
       type: String,
       notify: true,
       value: function() {
-        return Px.moment.tz.guess();
+        return DateTime.local().zoneName;
       }
     },
      /**
@@ -87,18 +82,28 @@ PxDatetimeBehavior.Shared = [{
       value: true
     },
      /**
-     * The minimum / earliest allowed date, as a a Moment object or an ISO 8601 String (dates before this will be disabled and unclickable).
+     * The minimum / earliest allowed date, as a a Luxon DateTime object or an ISO 8601 String (dates before this will be disabled and unclickable).
      */
     minDate: {
       type: Object,
       observer: '_minDateChanged'
     },
     /**
-     * The maximum / latest allowed date, as a a Moment object or an ISO 8601 String (dates after this will be disabled and unclickable).
+     * The maximum / latest allowed date, as a a Luxon DateTime object or an ISO 8601 String (dates after this will be disabled and unclickable).
      */
     maxDate: {
       type: Object,
       observer: '_maxDateChanged'
+    },
+    /**
+     * Returns the current time in a default Luxon DateTime Object
+     * See Luxon Documentation for more detail: https://moment.github.io/luxon/docs/class/src/datetime.js~DateTime.html
+    */
+    localDateTime: {
+      type: Object,
+      value: function() {
+        return DateTime.local();
+      } 
     }
   },
   observers: [
@@ -106,29 +111,29 @@ PxDatetimeBehavior.Shared = [{
   ],
   _updateMinMaxTz: function() {
     if(this.timeZone !== undefined) {
-      if(this.minDate && this.minDate.tz) {
-        this.minDate.tz(this.timeZone);
+      if(this.minDate && this.minDate.zoneName) {
+        this.minDate.setZone(this.timeZone);
       }
-      if(this.maxDate && this.maxDate.tz) {
-        this.maxDate.tz(this.timeZone);
+      if(this.maxDate && this.maxDate.zoneName) {
+        this.maxDate.setZone(this.timeZone);
       }
     }
   },
   _minDateChanged: function() {
     if(typeof this.minDate === 'string') {
       if(this.timeZone) {
-        this.minDate = Px.moment.tz(this.minDate, this.timeZone);
+        this.minDate = DateTime.fromISO(this.minDate).setZone(this.timeZone);
       } else {
-        this.minDate = Px.moment(this.minDate);
+        this.minDate = DateTime.fromObject(this.minDate);
       }
     }
   },
   _maxDateChanged: function() {
     if(typeof this.maxDate === 'string') {
       if(this.timeZone) {
-        this.maxDate = Px.moment.tz(this.maxDate, this.timeZone);
+        this.maxDate = DateTime.fromISO(this.maxDate).setZone(this.timeZone);
       } else {
-        this.maxDate = Px.moment(this.maxDate);
+        this.maxDate = DateTime.fromObject(this.maxDate);
       }
     }
   },
@@ -141,10 +146,10 @@ PxDatetimeBehavior.Shared = [{
    */
   _preserveTime: function(toPreserve, dest) {
     if(toPreserve && dest) {
-      dest.hours(toPreserve.hours());
-      dest.minutes(toPreserve.minutes());
-      dest.seconds(toPreserve.seconds());
-      dest.milliseconds(toPreserve.milliseconds());
+      dest.hour(toPreserve.hour);
+      dest.minute(toPreserve.minute);
+      dest.second(toPreserve.second);
+      dest.millisecond(toPreserve.millisecond);
     }
     return dest;
   }

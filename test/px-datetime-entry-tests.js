@@ -25,7 +25,7 @@ suite('px-datetime-entry-cell', function () {
   setup(function(done) {
     dateFixt = fixture('dateEntryDropdown');
     timeFixt = fixture('timeEntry');
-    now = Px.moment();
+    now = DateTime.local();
     dateFixt.momentObj = now;
     timeFixt.momentObj = now;
 
@@ -303,7 +303,7 @@ suite('px-datetime-entry', function () {
 
   setup(function(done) {
     dateFixt = fixture('dateEntryDropdown');
-    now = Px.moment();
+    now = DateTime.local();
     dateFixt.momentObj = now;
 
     flush(()=>{
@@ -485,27 +485,27 @@ suite('px-datetime-entry', function () {
 
 
   test('_preserveTime', function () {
-    var moment = Px.moment.tz(Px.moment("2016-04-03T00:00:00Z", Px.moment.ISO_8601), this.timeZone),
-        moment2 = Px.moment.tz(Px.moment("2009-06-07T10:32:06Z", Px.moment.ISO_8601), this.timeZone);
-        moment2.milliseconds('500');
+    var date = DateTime.fromISO("2016-04-03T00:00:00Z", {zone: this.timeZone}),
+        date2 = DateTime.fromISO("2009-06-07T10:32:06Z", {zone: this.timeZone});
+        date2 = date2.add({ milliseconds: 500});
 
-    var result = dateFixt._preserveTime(moment2, moment);
+    var result = dateFixt._preserveTime(date2, date2);
 
     //both result and moment should have the time to preserve
-    assert.equal(result.hour(), moment2.hours());
-    assert.equal(result.minute(), moment2.minute());
-    assert.equal(result.second(), moment2.second());
-    assert.equal(result.milliseconds(), moment2.milliseconds());
-    assert.equal(moment.hour(), moment2.hours());
-    assert.equal(moment.minute(), moment2.minute());
-    assert.equal(moment.second(), moment2.second());
-    assert.equal(moment.milliseconds(), moment2.milliseconds());
+    assert.equal(result.hour, date2.hour);
+    assert.equal(result.minute, date2.minute);
+    assert.equal(result.second, date2.second);
+    assert.equal(result.millisecond, date2.millisecond);
+    assert.equal(date.hour, date2.hour);
+    assert.equal(date.minute, date2.minute);
+    assert.equal(date.second, date2.second);
+    assert.equal(date.millisecond, date2.millisecond);
   });
 
 
   test('changing time zone changes moment timezone', function () {
     dateFixt.timeZone = 'Pacific/Noumea';
-    assert.equal(dateFixt.momentObj.tz(), 'Pacific/Noumea');
+    assert.equal(dateFixt.zoneName), 'Pacific/Noumea');
   });
 });// end of px-datetime-entry
 
@@ -597,7 +597,7 @@ suite('presets', function () {
 
   setup(function (done) {
     presets = fixture('presets');
-    now = Px.moment();
+    now = DateTime.local();
     presets.presetRanges = [
       {
         "displayText": "Today",
@@ -1270,7 +1270,7 @@ suite('px-datetime-entry-cell invalid', function () {
 
     setup(function(done) {
       dateFixt = fixture('dateEntryDropdown');
-      now = Px.moment();
+      now = DateTime.local();
       dateFixt.momentObj = now;
 
       flush(()=>{

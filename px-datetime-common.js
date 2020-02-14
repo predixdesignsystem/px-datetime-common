@@ -1,10 +1,3 @@
-import './px-datetime-entry.js';
-import './px-datetime-entry-cell.js';
-import './px-datetime-buttons.js';
-import './px-datetime-presets.js';
-import './px-datetime-behavior.js';
-import './px-datetime-range-behavior.js';
-
 /*
 Copyright (c) 2018, General Electric
 
@@ -20,9 +13,10 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-/*
-  FIXME(polymer-modulizer): the above comments were extracted
-  from HTML and may be out of place here. Review them and
-  then delete this comment!
-*/
-;
+
+import './px-datetime-entry.js';
+import './px-datetime-entry-cell.js';
+import './px-datetime-buttons.js';
+import './px-datetime-presets.js';
+import './px-datetime-behavior.js';
+import './px-datetime-range-behavior.js';

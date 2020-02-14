@@ -17,11 +17,6 @@ limitations under the License.
 /* Common demo imports */
 /* Imports for this component */
 /* Demo DOM module */
-/*
-  FIXME(polymer-modulizer): the above comments were extracted
-  from HTML and may be out of place here. Review them and
-  then delete this comment!
-*/
 import '@polymer/polymer/polymer-legacy.js';
 
 import 'px-demo/px-demo-header.js';
@@ -35,6 +30,7 @@ import 'px-demo/px-demo-code-editor.js';
 import '../px-datetime-entry.js';
 import { Polymer } from '@polymer/polymer/lib/legacy/polymer-fn.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
+import { DateTime } from 'luxon/src/luxon';
 Polymer({
   _template: html`
     <!-- Header -->
@@ -165,14 +161,14 @@ Polymer({
 
     minDate: {
       type: String,
-      defaultValue: Px.moment().subtract(3, 'month').toISOString(),
+      defaultValue: DateTime.local().minus({ months: 3 }).toISO(),
       inputType: 'text',
       inputPlaceholder: 'ISOString'
     },
 
     maxDate: {
       type: String,
-      defaultValue: Px.moment().add(3, 'month').toISOString(),
+      defaultValue: DateTime.local().plus({ months: 3 }).toISO(),
       inputType: 'text',
       inputPlaceholder: 'ISOString'
     },
