@@ -6,3 +6,4 @@ bower_components*
 reports
 .yo-rc.json
 bower-*.json
+build

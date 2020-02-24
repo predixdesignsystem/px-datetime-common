@@ -27,7 +27,7 @@ PxDatetimeBehavior.SingleMoment = [{
   properties: {
     /**
      * DateTime (Luxon) value with the date or time to display.  Will be parsed according to the moment format. (See momentFormat property.)
-     * TODO: Change momentFormat to Luxon compatibile string
+     * TODO: Change momentFormat to Luxon compatibile string and replace momentObj with dateTimeObj
      */
     dateTimeObj: {
       type: Object,

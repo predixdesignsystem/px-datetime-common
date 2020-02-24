@@ -22,8 +22,8 @@ Datetime input element. Includes iron-ally-keys-behavior to limit keystrokes to 
     id="cell{{index}}"
     class="cell"
     order='{{index}}'
-    moment-obj="[[momentObj]]"
-    moment-format='[[item]]'
+    date-time-obj="[[dateTimeObj]]"
+    date-time-format='[[item]]'
     time-zone="[[timeZone]]">
   </px-datetime-entry-cell>
 
@@ -45,7 +45,7 @@ import { dom } from '@polymer/polymer/lib/legacy/polymer.dom.js';
 Polymer({
   _template: html`
     <style include="px-datetime-entry-cell-styles"></style>
-    <input order="{{order}}" class="datetime-entry-input text-input--bare" on-focus="_handleFocus" on-blur="_handleBlur" on-paste="_handlePaste" on-beforepaste="_beforePaste" on-beforecopy="_beforeCopy" on-copy="_handleCopy" disabled="[[_getDisabled(momentFormat)]]" type="[[_getType(_isNumber)]]" pattern\$="[[_getPattern(_isNumber)]]" placeholder="[[_placeholderText(momentFormat)]]" on-keypress="_keyPress" max\$="[[_max]]" min\$="[[_min]]" step="1">
+    <input order="{{order}}" class="datetime-entry-input text-input--bare" on-focus="_handleFocus" on-blur="_handleBlur" on-paste="_handlePaste" on-beforepaste="_beforePaste" on-beforecopy="_beforeCopy" on-copy="_handleCopy" disabled="[[_getDisabled(dateTimeFormat)]]" type="[[_getType(_isNumber)]]" pattern\$="[[_getPattern(_isNumber)]]" placeholder="[[_placeholderText(dateTimeFormat)]]" on-keypress="_keyPress" max\$="[[_max]]" min\$="[[_min]]" step="1">
 `,
 
   is: 'px-datetime-entry-cell',
@@ -58,7 +58,7 @@ Polymer({
 
   properties: {
     /**
-     * Moment format tokens for the format to display/validate this field against (see http://momentjs.com/docs/#/parsing/string-format/)
+     * DateTime format tokens for the format to display/validate this field against (see https://moment.github.io/luxon/docs/manual/formatting.html#macro-tokens)
      *
      * Can only be configured statically; not data-bindable
      *
@@ -66,7 +66,7 @@ Polymer({
      *
      * @private
      */
-    momentFormat: {
+    dateTimeFormat: {
       type: String,
       observer: '_formatChanged'
     },
@@ -101,22 +101,22 @@ Polymer({
      */
     _max: {
       type: Number,
-      computed: '_getMax(momentFormat)'
+      computed: '_getMax(dateTimeFormat)'
     },
     /**
      * Minimum numeric value for given field type.
      */
     _min: {
       type: Number,
-      computed: '_getMin(momentFormat)'
+      computed: '_getMin(dateTimeFormat)'
     },
     /**
      * Determine is the cell is a number
-     * based off the `momentFormat`
+     * based off the `dateTimeFormat`
      */
     _isNumber: {
       type: Boolean,
-      computed: '_computeIsNumber(momentFormat)'
+      computed: '_computeIsNumber(dateTimeFormat)'
     },
     /**
      * Number of characters the cell is allow to be
@@ -128,7 +128,7 @@ Polymer({
   },
 
   observers:[
-    '_updateInputValue(momentObj, timeZone)',
+    '_updateInputValue(dateTimeObj, timeZone)',
     '_onResourcesUpdated(resources)'
   ],
 
@@ -159,19 +159,19 @@ Polymer({
   },
 
   /**
-   * Sets the value of the cell to the current moment obj
+   * Sets the value of the cell to the current dateTime obj
    */
-  setValueFromMoment: function() {
-    //if moment is null (or somehow undefined) => clear
-    if(!this.momentObj) {
+  setValueFromDateTime: function() {
+    //if DateTime is null (or somehow undefined) => clear
+    if(!this.dateTimeObj) {
       this.clear();
     } else {
-      this.$$('.datetime-entry-input').value = this.momentObj.tz(this.timeZone).format(this.momentFormat);
+      this.$$('.datetime-entry-input').value = this.dateTimeObj.setZone(this.timeZone).toLocaleString(this.dateTimeFormat);
     }
   },
 
-  _computeIsNumber: function(momentFormat) {
-    return !(/^(?:a|A|MMM|MMMM|Do|ddd|dddd|Z|ZZ)$/.test(momentFormat));
+  _computeIsNumber: function(dateTimeFormat) {
+    return !(/^(?:a|A|MMM|MMMM|Do|ddd|dddd|Z|ZZ)$/.test(dateTimeFormat));
   },
 
   _getPattern: function() {
@@ -187,7 +187,7 @@ Polymer({
   },
 
   /**
-   * Set the correct type of input field based on the momentFormat
+   * Set the correct type of input field based on the dateTimeFormat
    */
   _getType: function() {
     if(this._isNumber === undefined) {
@@ -199,19 +199,19 @@ Polymer({
   /**
    * Disables the input field for time zone entry cells.
    */
-  _getDisabled: function(momentFormat) {
-    return (this.momentFormat === 'Z' || this.momentFormat === 'ZZ');
+  _getDisabled: function(dateTimeFormat) {
+    return (this.dateTimeFormat === 'Z' || this.dateTimeFormat === 'ZZ');
   },
 
   _formatChanged: function() {
-    if(this.momentFormat !== undefined) {
+    if(this.dateTimeFormat !== undefined) {
       this._updateInputValue();
       this._sizeInputs();
 
-      if(this.momentFormat === 'A' || this.momentFormat === 'a'){
+      if(this.dateTimeFormat === 'A' || this.dateTimeFormat === 'a'){
         this._cellLength = 2;
-      } else if(this.momentFormat !== 'Z' && this.momentFormat !== 'ZZ') {
-        this._cellLength = this.momentFormat.length;
+      } else if(this.dateTimeFormat !== 'Z' && this.dateTimeFormat !== 'ZZ') {
+        this._cellLength = this.dateTimeFormat.length;
       } else {
         //don't prevent timezone size
         this._cellLength = -1;
@@ -253,11 +253,11 @@ Polymer({
    * Sets up regular key bindings
    */
   _addGeneralKeyBindings: function(){
-    if(this.momentFormat === 'A' || this.momentFormat === 'a'){
+    if(this.dateTimeFormat === 'A' || this.dateTimeFormat === 'a'){
       this.addOwnKeyBinding('a p','_toggleAMPM');
       this.addOwnKeyBinding('down up', '_toggleAMPM');
       this.addOwnKeyBinding('backspace del','_preventDeleteDefault');
-    } else if(this.momentFormat !== 'Z' && this.momentFormat !== 'ZZ') {
+    } else if(this.dateTimeFormat !== 'Z' && this.dateTimeFormat !== 'ZZ') {
       this.addOwnKeyBinding('down up', '_wraparound');
     }
   },
@@ -271,11 +271,11 @@ Polymer({
   },
 
   /**
-   * If `momentObj` or `timeZone` update, reflect this in the cell
+   * If `dateTimeObj` or `timeZone` update, reflect this in the cell
    */
   _updateInputValue: function() {
-    if(this.momentObj !== undefined && this.timeZone !== undefined) {
-      this.setValueFromMoment();
+    if(this.dateTimeObj !== undefined && this.timeZone !== undefined) {
+      this.setValueFromDateTime();
       this._sizeInputs();
     }
   },
@@ -286,10 +286,10 @@ Polymer({
   _onResourcesUpdated: function(resources) {
     const entryInput = this.$$('.datetime-entry-input');
     const currentPlaceholderText = entryInput.placeholder;
-    const nextPlaceholderText = this._placeholderText(this.momentFormat);
+    const nextPlaceholderText = this._placeholderText(this.dateTimeFormat);
     if (nextPlaceholderText !== currentPlaceholderText) {
       entryInput.placeholder = nextPlaceholderText;
-      if (!this.momentObj) {
+      if (!this.dateTimeObj) {
         this._sizeInputs();
       }
     }
@@ -323,7 +323,7 @@ Polymer({
   * Propagate the focus event up to entry to apply inline edit styles if applicable.
   */
   _handleFocus: function(evt) {
-    if(this.momentFormat !== 'Z' && this.momentFormat !== 'ZZ') {
+    if(this.dateTimeFormat !== 'Z' && this.dateTimeFormat !== 'ZZ') {
       this._setIsSelected(true);
     }
     this.fire('px-cell-focused');
@@ -331,7 +331,7 @@ Polymer({
 
   /**
    * Allow the user to loop through valid cell values
-   * ex If the momentFormat is MM the cell value can go from 12 to 1 by hitting the up arrow
+   * ex If the dateTimeFormat is MM the cell value can go from 12 to 1 by hitting the up arrow
    */
   _wraparound: function(evt) {
     var key = evt.detail.combo;
@@ -362,17 +362,17 @@ Polymer({
   _checkValue: function(){
     //if our format requires two digits and we only have one, add a 0 in front
     if(this.$$('.datetime-entry-input').value && this.$$('.datetime-entry-input').value.length === 1 &&
-      /^(?:MM|DD|HH|hh|kk|mm|ss|YY)$/.test(this.momentFormat)){
+      /^(?:MM|DD|HH|hh|kk|mm|ss|YY)$/.test(this.dateTimeFormat)){
       this.$$('.datetime-entry-input').value =  '0' + this.$$('.datetime-entry-input').value;
     }
     //if the format is YYYY or Y and the input is 2 characters then convert the input to a 4 character year representation
-    else if(this.$$('.datetime-entry-input').value && this.$$('.datetime-entry-input').value.length === 2 && this.momentFormat === 'YYYY'){
+    else if(this.$$('.datetime-entry-input').value && this.$$('.datetime-entry-input').value.length === 2 && this.dateTimeFormat === 'YYYY'){
       var mo = Px.moment(this.$$('.datetime-entry-input').value, 'YY');
-      this.$$('.datetime-entry-input').value = mo.format(this.momentFormat);
+      this.$$('.datetime-entry-input').value = mo.format(this.dateTimeFormat);
     }
-    else if(this.$$('.datetime-entry-input').value && this.momentFormat[0] === 'S' && this.$$('.datetime-entry-input').value.length < this.momentFormat.length){
+    else if(this.$$('.datetime-entry-input').value && this.dateTimeFormat[0] === 'S' && this.$$('.datetime-entry-input').value.length < this.dateTimeFormat.length){
       var dtNumber = parseInt(this.$$('.datetime-entry-input').value);
-      dtNumber = dtNumber.toPrecision(this.momentFormat.length) * Math.pow(10, (this.momentFormat.length - this.$$('.datetime-entry-input').value.length));
+      dtNumber = dtNumber.toPrecision(this.dateTimeFormat.length) * Math.pow(10, (this.dateTimeFormat.length - this.$$('.datetime-entry-input').value.length));
       this.$$('.datetime-entry-input').value =  dtNumber.toString();
     }
     this._sizeInputs();
@@ -419,8 +419,9 @@ Polymer({
    * Sets the AM/PM value.
    */
   _setAMPM: function(ampm){
-    var mo = Px.moment.tz('01:00:00 ' + ampm, 'hh:mm:ss ' + this.momentFormat, this.timeZone);
-    this.$$('.datetime-entry-input').value = mo.tz(this.timeZone).format(this.momentFormat);
+    //TODO: Convert from moment to DateTime
+    var mo = Px.moment.tz('01:00:00 ' + ampm, 'hh:mm:ss ' + this.dateTimeFormat, this.timeZone);
+    this.$$('.datetime-entry-input').value = mo.tz(this.timeZone).format(this.dateTimeFormat);
   },
 
   /**
@@ -432,10 +433,10 @@ Polymer({
   },
 
   /**
-   * If the momentFormat format is not 'Z', 'ZZ', 'X', 'x', 'A' or 'a' then return the momentFormat
+   * If the dateTimeFormat format is not 'Z', 'ZZ', 'X', 'x', 'A' or 'a' then return the dateTimeFormat
    * Note: placeholder text supports i18n
    */
-  _placeholderText: function(momentFormat){
+  _placeholderText: function(dateTimeFormat){
     var phText = {
       'Z': String.fromCharCode(177) + 'xx:xx',
       'ZZ': String.fromCharCode(177) + 'xxxx',
@@ -445,10 +446,10 @@ Polymer({
       'A': 'AM'
     };
 
-    let text = momentFormat;
+    let text = dateTimeFormat;
 
-    if(phText[momentFormat]){
-      text = phText[momentFormat];
+    if(phText[dateTimeFormat]){
+      text = phText[dateTimeFormat];
     }
     return this.localize(text);
   },
@@ -505,8 +506,8 @@ Polymer({
    * Format strings and setting/modification strings are different (?!?!)
    * This method converts one to the other
    */
-  _convertMomentFormat: function(){
-    var momentTypeConversion = {
+  _convertDateTimeFormat: function(){
+    var dateTimeTypeConversion = {
       'Y' : 'y',  //years
       'M' : 'M',  //months
       'D' : 'd',  // days
@@ -519,42 +520,42 @@ Polymer({
       'S' : 'ms', //milliseconds
       'x' : 'ms'  //milliseconds
     };
-    // take the first char of the moment format and convert it to the other format
-    return momentTypeConversion[this.momentFormat[0]]
+    // take the first char of the DateTime format and convert it to the other format
+    return dateTimeTypeConversion[this.dateTimeFormat[0]]
   },
 
   /**
    * Set the max value a token can be
    */
-  _getMax: function(momentFormat) {
-    if( /^(?:M|MM|h|hh)$/.test(momentFormat) ) {
+  _getMax: function(dateTimeFormat) {
+    if( /^(?:M|MM|h|hh)$/.test(dateTimeFormat) ) {
       return 12;
     }
-    if( /^(?:D|DD)$/.test(momentFormat) ) {
+    if( /^(?:D|DD)$/.test(dateTimeFormat) ) {
       return 31;
     }
-    if( /^(?:H|HH)$/.test(momentFormat) ) {
+    if( /^(?:H|HH)$/.test(dateTimeFormat) ) {
       return 23;
     }
-    if( /^(?:k|kk)$/.test(momentFormat) ) {
+    if( /^(?:k|kk)$/.test(dateTimeFormat) ) {
       return 24;
     }
-    if( /^(?:m|mm|ss|s)$/.test(momentFormat) ) {
+    if( /^(?:m|mm|ss|s)$/.test(dateTimeFormat) ) {
       return 59;
     }
-    if(momentFormat === "S") {
+    if(dateTimeFormat === "S") {
       return 9;
     }
-    if(momentFormat === "SS") {
+    if(dateTimeFormat === "SS") {
       return 99;
     }
-    if(momentFormat === "SSS") {
+    if(dateTimeFormat === "SSS") {
       return 999;
     }
-    if(momentFormat === "YY") {
+    if(dateTimeFormat === "YY") {
       return 99;
     }
-    if(momentFormat === "YYYY") {
+    if(dateTimeFormat === "YYYY") {
       return 9999;
     }
     return '';
@@ -563,11 +564,11 @@ Polymer({
   /**
    * Set the min value a token can be
    */
-  _getMin: function(momentFormat) {
-    if( /^(?:YY|YYYY|X|x|H|HH|m|mm|s|ss|S|SS|SSS)$/.test(momentFormat) ) {
+  _getMin: function(dateTimeFormat) {
+    if( /^(?:YY|YYYY|X|x|H|HH|m|mm|s|ss|S|SS|SSS)$/.test(dateTimeFormat) ) {
       return 0;
     }
-    if( /^(?:M|MM|D|DD|h|hh|k|kk)$/.test(momentFormat) ) {
+    if( /^(?:M|MM|D|DD|h|hh|k|kk)$/.test(dateTimeFormat) ) {
       return 1;
     }
     return '';
@@ -578,7 +579,7 @@ Polymer({
     if(evt.key !== 'Backspace' && evt.key !== 'Delete' && evt.key !== 'Cut' && evt.key !== 'Copy' && evt.key !== 'ArrowLeft' && evt.key !== 'ArrowRight') {
 
       //AM PM, only accept A and P
-      if((this.momentFormat === 'A' || this.momentFormat === 'a') && !/[aApP]/.test(evt.key)) {
+      if((this.dateTimeFormat === 'A' || this.dateTimeFormat === 'a') && !/[aApP]/.test(evt.key)) {
         evt.preventDefault();
         return;
       }

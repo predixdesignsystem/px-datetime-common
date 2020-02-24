@@ -51,7 +51,7 @@ Polymer({
       <px-demo-component slot="px-demo-component" class="px-datetime-common-demo">
         <p class="u-mb0">Event fired: <strong>px-datetime-submitted</strong></p>
         <p class="zeta u-mt0">See API Reference below for more details</p>
-        <px-datetime-entry resources="{{props.resources.value}}" block-future-dates="{{props.blockFutureDates.value}}" block-past-dates="{{props.blockPastDates.value}}" hide-icon="{{props.hideIcon.value}}" date-or-time="{{props.dateOrTime.value}}" show-time-zone="{{props.showTimeZone.value}}" time-zone="{{props.timeZone.value}}" moment-format="{{props.momentFormat.value}}" min-date="{{props.minDate.value}}" max-date="{{props.maxDate.value}}">
+        <px-datetime-entry resources="{{props.resources.value}}" block-future-dates="{{props.blockFutureDates.value}}" block-past-dates="{{props.blockPastDates.value}}" hide-icon="{{props.hideIcon.value}}" date-or-time="{{props.dateOrTime.value}}" show-time-zone="{{props.showTimeZone.value}}" time-zone="{{props.timeZone.value}}" date-time-format="{{props.dateTimeFormat.value}}" min-date="{{props.minDate.value}}" max-date="{{props.maxDate.value}}">
         </px-datetime-entry>
       </px-demo-component>
       <!-- END Component ------------------------------------------------------>
@@ -92,7 +92,8 @@ Polymer({
             blockFutureDates:false,
             blockPastDates:false,
             hideIcon:false,
-            momentFormat:"MM/DD/YY",
+            //TODO: UPDATE to handle formatting for Luxon Formatting String
+            dateTimeFormat:"MM/DD/YY",
             dateOrTime:"date",
             showTimeZone:"text",
             timeZone: "UTC"
@@ -130,8 +131,8 @@ Polymer({
       defaultValue: false,
       inputType: 'toggle'
     },
-
-    momentFormat: {
+    //TODO: UPDATE to handle formatting for Luxon Formatting String
+    dateTimeFormat: {
       type: String,
       defaultValue: 'MM/DD/YY',
       inputType: 'text',

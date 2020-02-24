@@ -54,7 +54,7 @@
     "type-detect": "1.0.0",
     "webcomponentsjs": "^1.0.0"
   },
-  "main": "px-datetime-common.js",
+  "main": "index.html",
   "dependencies": {
     "@polymer/app-localize-behavior": "^3.0.1",
     "@polymer/iron-a11y-keys-behavior": "^3.0.1",

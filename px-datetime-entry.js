@@ -68,7 +68,7 @@ Polymer({
             </template>
         </button>
         <template is="dom-repeat" items="{{_cellFormatArray}}">
-          <px-datetime-entry-cell id="cell{{index}}" class="cell" order="{{index}}" moment-obj="[[momentObj]]" moment-format="[[item]]" symbol="[[_returnSymbol(index,_symbolCharArray)]]" time-zone="[[timeZone]]" is-selected="{{isSelected}}" resources="[[resources]]" language="[[language]]" formats="[[formats]]">
+          <px-datetime-entry-cell id="cell{{index}}" class="cell" order="{{index}}" date-time-obj="[[dateTimeObj]]" moment-format="[[item]]" symbol="[[_returnSymbol(index,_symbolCharArray)]]" time-zone="[[timeZone]]" is-selected="{{isSelected}}" resources="[[resources]]" language="[[language]]" formats="[[formats]]">
           </px-datetime-entry-cell>
           <template is="dom-if" if="{{_isSymbol(index,_symbolCharArray)}}">
             <div class="dt-entry-symbol">
@@ -196,12 +196,12 @@ Polymer({
   },
 
   /**
-   * Resets the input value for each entry-cell input field to the current momentObj.
+   * Resets the input value for each entry-cell input field to the current dateTimeObj.
    */
-  setValueFromMoment: function() {
+  setValueFromDateTime: function() {
     var cells = dom(this.root).querySelectorAll('.cell');
     cells.forEach(function(cell) {
-      cell.setValueFromMoment();
+      cell.setValueFromDateTime();
     });
   },
 
