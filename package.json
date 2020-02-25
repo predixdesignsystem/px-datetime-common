@@ -62,7 +62,6 @@
     "luxon": "^1.22.0",
     "px-dropdown": "https://github.com/predixdesignsystem/px-dropdown.git#polymer-upgrade",
     "px-icon-set": "https://github.com/predixdesignsystem/px-icon-set.git#polymer-upgrade",
-    "px-moment-imports": "https://github.com/predixdesignsystem/px-moment-imports.git#polymer-upgrade",
     "px-overlay": "https://github.com/predixdesignsystem/px-overlay.git#polymer-upgrade"
   }
 }

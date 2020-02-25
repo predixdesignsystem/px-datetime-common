@@ -505,7 +505,7 @@ suite('px-datetime-entry', function () {
 
   test('changing time zone changes moment timezone', function () {
     dateFixt.timeZone = 'Pacific/Noumea';
-    assert.equal(dateFixt.zoneName), 'Pacific/Noumea');
+    assert.equal((dateFixt.zoneName), 'Pacific/Noumea');
   });
 });// end of px-datetime-entry
 
@@ -606,23 +606,23 @@ suite('presets', function () {
       },
       {
         "displayText": "Yesterday",
-        "startDateTime": now.clone().subtract(1, 'day'),
-        "endDateTime": now.clone().subtract(1, 'day')
+        "startDateTime": now.minus({ days: 1 }),
+        "endDateTime": now.minus({ days: 1 })
       },
       {
         "displayText": "Last 7 Days",
-        "startDateTime": now.clone().subtract(7, 'days'),
+        "startDateTime": now.minus({ days: 7 }),
         "endDateTime": now
       },
       {
         "displayText": "This Month",
-        "startDateTime": now.clone().startOf('month'),
-        "endDateTime": now.clone().endOf('month')
+        "startDateTime": now.startOf('month'),
+        "endDateTime": now.endOf('month')
       },
       {
         "displayText": "Last Month",
-        "startDateTime": now.clone().subtract(1, 'months').startOf('month'),
-        "endDateTime": now.clone().subtract(1, 'months').endOf('month')
+        "startDateTime": now.minus({ months: 1 }).startOf('month'),
+        "endDateTime": now.minus({ months: 1 }).endOf('month')
       }
     ];
     flush(() => {

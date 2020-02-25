@@ -53,7 +53,7 @@ import 'px-overlay/px-overlay-behavior.js';
 import { Polymer } from '@polymer/polymer/lib/legacy/polymer-fn.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 import { dom } from '@polymer/polymer/lib/legacy/polymer.dom.js';
-import { DateTime } from 'luxon/src/luxon';
+import { DateTime } from 'luxon';
 Polymer({
   _template: html`
     <style include="px-datetime-entry-styles"></style>

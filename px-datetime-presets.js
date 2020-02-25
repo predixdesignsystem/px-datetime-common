@@ -29,7 +29,7 @@ The list of preset ranges in the rangepicker modal.
 
 import '@polymer/polymer/polymer-legacy.js';
 
-import 'px-moment-imports/px-moment-imports.js';
+import { DateTime } from 'luxon';
 import { AppLocalizeBehavior } from '@polymer/app-localize-behavior/app-localize-behavior.js';
 import './css/px-datetime-presets-styles.js';
 import { Polymer } from '@polymer/polymer/lib/legacy/polymer-fn.js';
